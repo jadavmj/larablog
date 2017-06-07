@@ -12,10 +12,10 @@
 */
 
 Route::get('/', 'BlogController@index');
+Route::get('/create', 'BlogController@create');
+Route::get('/edit/{id}', 'BlogController@edit')->where('id', '[0-9]+');
+Route::post('/update/{id}', 'BlogController@update')->where('id', '[0-9]+');
+Route::post('/store', 'BlogController@store');
 Route::get('/show/{id}', 'BlogController@show')->where('id', '[0-9]+');
-Route::get('auth/login', 'FrontController@login');
-Route::post('auth/login', 'FrontController@authenticate');
-Route::get('auth/logout', 'FrontController@logout');
 Auth::routes();
-
 Route::get('/home', 'BlogController@index')->name('home');

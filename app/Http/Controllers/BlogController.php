@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 use App\Post;
 use Illuminate\Http\Request;
+use Auth;
+use Session;
 
 class BlogController extends Controller
 {
@@ -13,7 +15,12 @@ class BlogController extends Controller
      */
     public function index()
     {
-        $posts = Post::where('active',1)->orderBy('created_at','desc')->paginate(5);
+        $user = Auth::user();
+        if($user && $user->is_admin()) {
+            $posts = Post::all()->sortByDesc('created_at');
+        } else {
+            $posts = Post::where('active',1)->orderBy('created_at','desc')->paginate(5);
+        }
         return view('home', array('posts' => $posts));
     }
 
@@ -24,7 +31,7 @@ class BlogController extends Controller
      */
     public function create()
     {
-        //
+        return view('posts.create');
     }
 
     /**
@@ -35,7 +42,12 @@ class BlogController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->all();
+        $data['user_id'] =  Auth::user()->id;
+        $data['published_at'] = date('Y-m-d H:m:s');
+        Post::create($data);
+        Session::flash('msg', 'Post successfully saved!');
+        return back();
     }
 
     /**
@@ -62,7 +74,13 @@ class BlogController extends Controller
      */
     public function edit($id)
     {
-        //
+        $user = Auth::user();
+        if($user && $user->is_admin()) {
+            $post = Post::find($id);
+            return view('posts.edit')->withPost($post);
+        } else {
+           return redirect('/')->withErrors('requested action not allowed');
+        }
     }
 
     /**
@@ -74,7 +92,13 @@ class BlogController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $post = Post::find($id);
+        $post->title = $request->get('title');
+        $post->body = $request->get('body');
+        $post->active = $request->get('active');
+        $post->save();
+        Session::flash('msg', 'Successfully updated post!');
+        return back();
     }
 
     /**

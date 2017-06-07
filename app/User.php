@@ -4,10 +4,13 @@ namespace App;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Zizaco\Entrust\Traits\EntrustUserTrait;
 
 class User extends Authenticatable
 {
     use Notifiable;
+
+    use EntrustUserTrait;
 
     /**
      * The attributes that are mass assignable.
@@ -33,18 +36,14 @@ class User extends Authenticatable
         return $this->hasMany('App\Post','user_id');
     }
 
-    public function can_post()
+    public function roles()
     {
-        $role = $this->role;
-        if($role == 'author' || $role == 'admin')
-        {
-          return true;
-        }
-        return false;
+        return $this->belongsToMany('App\Role');
     }
 
+
     public function is_admin() {
-        $role = $this->role;
+        $role = $this->roles->first()->name;
         if($role == 'admin')
         {
           return true;

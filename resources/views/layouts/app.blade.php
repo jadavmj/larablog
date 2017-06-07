@@ -52,6 +52,9 @@
                                 </a>
 
                                 <ul class="dropdown-menu" role="menu">
+                                    @if ( Auth::user()->is_admin() )
+                                        <li><a href="/create">Create Post</a></li>
+                                    @endif
                                     <li>
                                         <a href="{{ route('logout') }}"
                                             onclick="event.preventDefault();
