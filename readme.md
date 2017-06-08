@@ -1,51 +1,87 @@
-<p align="center"><img src="https://laravel.com/assets/img/components/logo-laravel.svg"></p>
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
-</p>
+## Introduction
 
-## About Laravel
+This is a Simple blog system written in Laravel. It provides following functionality.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as:
+- An Administrator may view all existing blog posts or see a message that no blogs are
+  available. 
+- A logged out user should be able to see all Active blog posts available.
+  The list of Active blogs should show it’s Title, Excerpt Body, Published Time &
+  Author’s Name. 
+- Upon clicking the blogs Title, it should present the full blog article
+  showing Title, Full Body, Published Time, Author’s Name.
+- An Administrator can create a new blog article with fields including Title, Body and Active
+  Status. 
+- An Administrator can edit an existing blog and be able to update it’s Title, Body
+  and Active Status
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Setup
 
-Laravel is accessible, yet powerful, providing tools needed for large, robust applications. A superb combination of simplicity, elegance, and innovation give you tools you need to build any application with which you are tasked.
+   ### Options 1: Using Homestead
 
-## Learning Laravel
+   	### you will need following
+ 		- Git
+ 		- Homestead setup to run Laravel
+ 		- Vagrant
+ 		- Virtual Box
+ 
+ 	### steps
 
-Laravel has the most extensive and thorough documentation and video tutorial library of any modern web application framework. The [Laravel documentation](https://laravel.com/docs) is thorough, complete, and makes it a breeze to get started learning the framework.
+	   - Install latest verisons of Git, Vagrant and Virtual Box
+	   - Setup Homestead, follow steps from offical documentation 
+	     https://laravel.com/docs/5.4/homestead
+	   - Navigate to homestead directory
+	     cd ~/Homestead
+	   - Clone this repository
+	     git clone https://github.com/jadavmj/larablog
+	   - Provison Vagrant Box
+	     vagrant provision
+	   - add host entry to hosts file
+         127.0.0.1 homestead.app     
+       - browse 'http://homestead.app'
 
-If you're not in the mood to read, [Laracasts](https://laracasts.com) contains over 900 video tutorials on a range of topics including Laravel, modern PHP, unit testing, JavaScript, and more. Boost the skill level of yourself and your entire team by digging into our comprehensive video library.
+	     
+	### Options 2: Using Mamp or Xampp
+	   - Install latest version of Mamp
+	   - Navigate to htdocs directory
+	   - Clone this repository
+	     git clone https://github.com/jadavmj/larablog
+	   - Navigate to cloned repository
+	     cd /path/to/htdocs/larablog
+	   - Install dependencies using composer
+	     php composer update
+	   - Install migrations
+	     php aritsan migrate
+	   - Seed Database
+	     php artisan db:seed
+	   - setup apache virtual host 
+	    
+	    
+	    <VirtualHost *:80>
+			ServerAdmin webmaster@larablog.com
+			DocumentRoot "/path/to/htdocs/larablog/public"
+			ServerName homestead.app
+		</VirtualHost>
+			 
+		<Directory "/path/to/htdocs/larablog/public">
+			Options Indexes FollowSymLinks
+			AllowOverride all
+			# onlineoffline tag - don't remove
+			Order Deny,Allow
+			Deny from all
+			Allow from 127.0.0.1
+		</Directory>
+		
+		
+       - restart apache via Mamp or Xampp control panel  
+       - add host entry to hosts file
+         127.0.0.1 homestead.app     
+       - browse 'http://homestead.app'
 
-## Laravel Sponsors
+## Test Admin User functionality
 
-We would like to extend our thanks to the following sponsors for helping fund on-going Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](http://patreon.com/taylorotwell):
+	you can login as admin user with following details,
 
-- **[Vehikl](http://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[British Software Development](https://www.britishsoftware.co)**
-- **[Styde](https://styde.net)**
-- [Fragrantica](https://www.fragrantica.com)
-- [SOFTonSOFA](https://softonsofa.com/)
+	username: admin
+	password: admin123
 
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](http://laravel.com/docs/contributions).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).
