@@ -31,6 +31,10 @@ class BlogController extends Controller
      */
     public function create()
     {
+        if(!$this->is_allowed()) {
+           return redirect('/')->withErrors('requested action not allowed');
+        }
+
         return view('posts.create');
     }
 
@@ -42,6 +46,10 @@ class BlogController extends Controller
      */
     public function store(Request $request)
     {
+        if(!$this->is_allowed()) {
+           return redirect('/')->withErrors('requested action not allowed');
+        }
+
         $data = $request->all();
         $data['user_id'] =  Auth::user()->id;
         $data['published_at'] = date('Y-m-d H:m:s');
@@ -59,10 +67,10 @@ class BlogController extends Controller
     public function show($id)
     {
         $post = Post::find($id);
-        if(!$post)
-        {
+        if(!$post) {
            return redirect('/')->withErrors('requested page not found');
         }
+
         return view('posts.show')->withPost($post);
     }
 
@@ -74,13 +82,12 @@ class BlogController extends Controller
      */
     public function edit($id)
     {
-        $user = Auth::user();
-        if($user && $user->is_admin()) {
-            $post = Post::find($id);
-            return view('posts.edit')->withPost($post);
-        } else {
+        if(!$this->is_allowed()) {
            return redirect('/')->withErrors('requested action not allowed');
         }
+
+        $post = Post::find($id);
+        return view('posts.edit')->withPost($post);
     }
 
     /**
@@ -92,6 +99,10 @@ class BlogController extends Controller
      */
     public function update(Request $request, $id)
     {
+        if(!$this->is_allowed()) {
+           return redirect('/')->withErrors('requested action not allowed');
+        }
+
         $post = Post::find($id);
         $post->title = $request->get('title');
         $post->body = $request->get('body');
@@ -110,5 +121,16 @@ class BlogController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    /**
+     * Check if user is logged in and is admin.
+     *
+     * @return boolean
+     */
+    private function is_allowed() 
+    {
+        $user = Auth::user();
+        return $user && $user->is_admin();
     }
 }
